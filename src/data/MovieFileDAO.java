@@ -3,8 +3,11 @@ package data;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -37,8 +40,8 @@ public class MovieFileDAO implements MovieDAO {
 				String name = tokens[0];
 				String mpaaRating = tokens[1];
 				Boolean watched = Boolean.parseBoolean(tokens[2]);
-				String userRating = tokens[3];
-				String genre = tokens[4];
+				double userRating = Double.parseDouble(tokens[3]);
+				List<String> genre = new ArrayList<>(Arrays.asList(tokens[4].split(",")));
 				String description = tokens[5];
 				String image = tokens[6];
 				String userNotes = tokens[7];

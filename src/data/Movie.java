@@ -1,12 +1,14 @@
 package data;
 
+import java.util.List;
+
 public class Movie {
 	private int id;
 	private String name;
 	private String mpaaRating;
 	private String userNotes;
-	private String userRating;
-	private String genre;
+	private double userRating;
+	private List<String> genre;
 	private String description;
 	private String image;
 	private Boolean watched;
@@ -15,7 +17,7 @@ public class Movie {
 	public Movie() {
 	}
 	
-	public Movie(String name, String mpaaRating, Boolean watched, String userRating, String genre, String description, String image, String userNotes) {
+	public Movie(String name, String mpaaRating, Boolean watched, double userRating, List<String> genre, String description, String image, String userNotes) {
 		this.id = ++numCreated;
 		this.name = name;
 		this.mpaaRating = mpaaRating;
@@ -49,11 +51,11 @@ public class Movie {
 		return userNotes;
 	}
 
-	public String getUserRating() {
+	public double getUserRating() {
 		return userRating;
 	}
 
-	public String getGenre() {
+	public List<String> getGenre() {
 		return genre;
 	}
 
@@ -87,11 +89,11 @@ public class Movie {
 		this.userNotes = userNotes;
 	}
 
-	public void setUserRating(String userRating) {
+	public void setUserRating(double userRating) {
 		this.userRating = userRating;
 	}
 
-	public void setGenre(String genre) {
+	public void setGenre(List<String> genre) {
 		this.genre = genre;
 	}
 
