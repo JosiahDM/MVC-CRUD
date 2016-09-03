@@ -11,5 +11,6 @@ public interface MovieDAO {
 	public Movie change(int direction, int currentId);
 	public void applyFilter(Predicate<Movie> predicate);
 	public Collection<Movie> getAllValues();
+	public Movie deleteMovie(int id);
 	
 }

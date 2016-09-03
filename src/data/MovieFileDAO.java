@@ -40,7 +40,7 @@ public class MovieFileDAO implements MovieDAO {
 				String name = tokens[0];
 				String mpaaRating = tokens[1];
 				Boolean watched = Boolean.parseBoolean(tokens[2]);
-				double userRating = Double.parseDouble(tokens[3]);
+				int userRating = Integer.parseInt(tokens[3]);
 				List<String> genre = new ArrayList<>(Arrays.asList(tokens[4].split(",")));
 				String description = tokens[5];
 				String image = tokens[6];
@@ -81,5 +81,10 @@ public class MovieFileDAO implements MovieDAO {
 	@Override
 	public Collection<Movie> getAllValues() {
 		return movies.values();
+	}
+	
+	@Override
+	public Movie deleteMovie(int id) {
+		return movies.remove(id);
 	}
 }

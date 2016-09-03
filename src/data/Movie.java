@@ -7,17 +7,18 @@ public class Movie {
 	private String name;
 	private String mpaaRating;
 	private String userNotes;
-	private double userRating;
+	private int userRating;
 	private List<String> genre;
 	private String description;
 	private String image;
-	private Boolean watched;
+	private boolean watched;
 	public static int numCreated;
 	
 	public Movie() {
+		this.id = ++numCreated;
 	}
 	
-	public Movie(String name, String mpaaRating, Boolean watched, double userRating, List<String> genre, String description, String image, String userNotes) {
+	public Movie(String name, String mpaaRating, boolean watched, int userRating, List<String> genre, String description, String image, String userNotes) {
 		this.id = ++numCreated;
 		this.name = name;
 		this.mpaaRating = mpaaRating;
@@ -25,7 +26,7 @@ public class Movie {
 		this.userRating = userRating;
 		this.genre = genre;
 		this.description = description;
-		this.image = image;
+		setImage(image);
 		this.userNotes = userNotes;
 	}
 	
@@ -43,7 +44,7 @@ public class Movie {
 		return mpaaRating;
 	}
 	
-	public Boolean getWatched() {
+	public boolean getWatched() {
 		return watched;
 	}
 
@@ -51,7 +52,7 @@ public class Movie {
 		return userNotes;
 	}
 
-	public double getUserRating() {
+	public int getUserRating() {
 		return userRating;
 	}
 
@@ -81,7 +82,7 @@ public class Movie {
 		this.mpaaRating = mpaaRating;
 	}
 	
-	public void setWatched(Boolean watched) {
+	public void setWatched(boolean watched) {
 		this.watched = watched;
 	}
 	
@@ -89,7 +90,7 @@ public class Movie {
 		this.userNotes = userNotes;
 	}
 
-	public void setUserRating(double userRating) {
+	public void setUserRating(int userRating) {
 		this.userRating = userRating;
 	}
 
@@ -102,13 +103,14 @@ public class Movie {
 	}
 
 	public void setImage(String image) {
-		this.image = image;
+		this.image = "img/moviePosters/" + image;
 	}
 
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", name=" + name + "]";
+		return "Movie [id=" + id + ", name=" + name + ", mpaaRating=" + mpaaRating + ", userNotes=" + userNotes
+				+ ", userRating=" + userRating + ", genre=" + genre + ", description=" + description + ", image="
+				+ image + ", watched=" + watched + "]";
 	}
-	
 	
 }
