@@ -30,6 +30,11 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    height:100%;
+}
+html {
+    height:100%;
 }
 ol, ul {
 	list-style: none;
@@ -58,7 +63,7 @@ table {
 }
 /* Zebra striping */
 tr:nth-of-type(odd) {
-  background: #eee;
+  background: #e3ebfb;
 }
 th {
   background: #333;
@@ -70,6 +75,221 @@ td, th {
   border: 1px solid #ccc;
   text-align: left;
 }
+.main-table {
+    background-color: white;
+}
+.main-table td {
+    vertical-align: middle;
+    padding: 5px;
+}
+
+.main-table a {
+    text-decoration: none;
+}
+.main-table textarea {
+    width: 95%;
+    border: none;
+    resize: none;
+    border: 1px solid #888;
+    background-color: transparent;
+    padding: 3px;
+    border-radius: 2px;
+    color: black;
+    font-size: .9em;
+}
+
+#movieImg {
+    height: 100px;
+    padding: 0px;
+}
+
+#movieImg img {
+    height: 100px;
+}
+
+#listAll {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+#navbar {
+    width: 100%;
+    height: 56px;
+    background-color: #222222;
+    color: white;
+}
+
+#navbar li {
+    float: left;
+}
+#navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 20px 20px;
+    text-decoration: none;
+}
+
+#navbar li a:hover {
+    background-color: #000000;
+}
+
+#container {
+    background-color: rgb(223, 223, 223);
+    height: 100%;
+}
+
+
+.edit {
+    border: 1px solid #888;
+    width: 40px;
+    padding-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 2px;
+    background-color: rgb(51, 51, 51);
+    color:white;
+    text-decoration: none;
+    height:15px;
+}
+.edit:hover {
+    background-color: black;
+}
+#editSubmit {
+    border:none;
+    font-size:.9em;
+    background-color: rgb(5, 137, 232);
+    color:white;
+    border-radius: 3px;
+
+}
+#editSubmit:hover {
+    background-color:rgb(0, 20, 107) ;
+}
+
+.clickable {
+    color: #076cdc;
+}
+.clickable:hover {
+    text-decoration: underline;
+    color: rgb(0, 20, 107);
+}
+.checked {
+    padding-left: 25px;
+}
+#selected img{
+    height: calc(100vh - 60px);
+}
+#details {
+    padding: 10px;
+}
+
+#details h2 {
+    margin-bottom: 5px;
+}
+
+#details p {
+    margin-bottom: 10px;
+}
+
+#selected textarea {
+    width: 95%;
+    border: none;
+    resize: none;
+    border: 1px solid #888;
+    background-color: transparent;
+    padding: 3px;
+    border-radius: 2px;
+    color: black;
+    font-size: .9em;
+    margin-bottom: 5px;
+}
+.spacing {
+    height:10vh;
+    text-align: center;
+}
+#newMovieHeader {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.centering {
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+#formStyling {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+    background-color: white;
+    padding:10px;
+    border-radius: 4px;
+}
+
+#formStyling .textInput {
+    width: 100%;
+    height:30px;
+    font-size: .9em;
+    overflow: scroll;
+    border:1px solid grey;
+    border-radius: 2px;
+    padding:4px;
+}
+
+#formStyling form {
+    margin-left: auto;
+    margin-right: auto;
+    width: 320px;
+}
+
+#formStyling li {
+    margin-bottom: 10px;
+}
+.submitButton {
+    border: none;
+    background-color: rgb(5, 137, 232);
+    width: 100px;
+    height: 40px;
+    color:white;
+    font-size: 1em;
+}
+
+.submitButton:hover {
+    background-color: rgb(6, 98, 164);
+}
+#submitWrap {
+    text-align: center;
+}
+
+.options {
+    font-size: 16px;
+}
+#container {
+    width: 100%;
+    height: 100%;
+}
+
+#watchedButton {
+    background-color: rgb(51, 51, 51);
+    height:100%;
+    padding:2px 5px 2px 5px;
+    border-radius: 3px;
+}
+#watchedButton:hover {
+    background-color: black;
+}
+#watchedButton a {
+        color: white;
+}
+#watchedButton a:hover {
+    text-decoration: none;
+}
+
+#listAll p{
+    padding-top:10px;
+}
 
 /*
 Max width before this PARTICULAR table gets nasty
@@ -80,6 +300,9 @@ and also iPads specifically.
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px)  {
 
+    #listAll {
+        width: 100%;
+    }
 	/* Force table to not be like tables anymore */
 	table, thead, tbody, th, td, tr {
 		display: block;
@@ -92,12 +315,11 @@ only screen and (max-width: 760px),
 		left: -9999px;
 	}
 
-	tr { border: 1px solid #ccc; }
+    tr { border: none;  } /* 1px solid #ccc;*/
 
 	td {
 		/* Behave  like a "row" */
 		border: none;
-		border-bottom: 1px solid #eee;
 		position: relative;
 	}
 
@@ -108,24 +330,74 @@ only screen and (max-width: 760px),
 		/* Top/left values mimic padding */
 		top: 6px;
 		left: 6px;
-		/*width: 45%;*/
+		width: 45%;
 		padding-right: 10px;
 		white-space: nowrap;
 	}
 
+    img {
+        max-width: 100%;
+        height: auto;
+        width: auto\9; /* ie8 */
+    }
 
-    /*
-	Label the data
-	*/
-	/*td:nth-of-type(1):before { content: "First Name"; }
-	td:nth-of-type(2):before { content: "Last Name"; }
-	td:nth-of-type(3):before { content: "Job Title"; }
-	td:nth-of-type(4):before { content: "Favorite Color"; }
-	td:nth-of-type(5):before { content: "Wars of Trek?"; }
-	td:nth-of-type(6):before { content: "Porn Name"; }
-	td:nth-of-type(7):before { content: "Date of Birth"; }
-	td:nth-of-type(8):before { content: "Dream Vacation City"; }
-	td:nth-of-type(9):before { content: "GPA"; }
-	td:nth-of-type(10):before { content: "Arbitrary Data"; }
-    */
+    #selected img{
+        height: 60vh;
+    }
+
+    body {
+        height:100%;
+        background-color: rgb(223, 223, 223);
+    }
+    html {
+        height:100%;
+        width: 100%;
+    }
+
+    #formStyling {
+        width: 100%;
+    }
+    .centering {
+        width:100vw;
+    }
+    .spacing {
+        height: 5vh;
+    }
+
+    #container {
+        width:100%;
+        height: 100%;
+    }
+
+    #bottom-td {
+        border-bottom: 1px solid rgb(193, 193, 193);
+    }
+
+    #movieImg {
+        text-align: center;
+        height:50vh;
+    }
+    #movieImg img {
+        height: 50vh;
+    }
+    .centerResponsive {
+        text-align: center;
+    }
+
+    #watchedButton {
+        width: 40%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #delete {
+        width:50px;
+        margin-left: calc(100vw - 70px);
+        margin-top:-20px;
+        padding-bottom:10px;
+        display:inline-block!important;
+    }
+    #right-td-full {
+        display:none;
+    }
+
 }

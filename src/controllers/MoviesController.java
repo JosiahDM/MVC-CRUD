@@ -58,6 +58,7 @@ public class MoviesController {
 	public ModelAndView createMovie(Movie movie) {
 		movieDao.addMovie(movie);
 		ModelAndView mv = new ModelAndView("index.jsp");
+		mv.addObject("movies", movieDao.getAllValues());
 		return mv;
 	}
 	
