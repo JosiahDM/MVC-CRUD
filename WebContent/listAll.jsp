@@ -7,7 +7,7 @@
                     <img src="${movie.image}"/>
                 </td>
                 <td class="centerResponsive">
-                    <a class="clickable" href="selectMovie.do?id=${movie.id}#${movie.id}">${movie.name}</a>
+                    <a id="movieName" class="clickable" href="selectMovie.do?id=${movie.id}#${movie.id}">${movie.name}</a>
                     <p>${movie.mpaaRating} | ${movie.genre}</p>
                 </td>
                 <td class="centerResponsive">

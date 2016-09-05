@@ -104,7 +104,7 @@ td, th {
 }
 
 #movieImg img {
-    height: 100px;
+    width: 100px;
 }
 
 #listAll {
@@ -133,6 +133,10 @@ td, th {
 
 #navbar li a:hover {
     background-color: #000000;
+}
+
+#movieName {
+    font-size:1.2em;
 }
 
 #container {
@@ -378,6 +382,7 @@ only screen and (max-width: 760px),
         height:50vh;
     }
     #movieImg img {
+        width: auto;
         height: 50vh;
     }
     .centerResponsive {
@@ -398,6 +403,10 @@ only screen and (max-width: 760px),
     }
     #right-td-full {
         display:none;
+    }
+
+    #movieName {
+        font-size:1.4em;
     }
 
 }

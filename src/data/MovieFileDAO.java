@@ -1,8 +1,12 @@
 package data;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,11 +17,13 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 
 public class MovieFileDAO implements MovieDAO {
 	private static final String FILE_NAME="/WEB-INF/movies.csv";
+	private static final String POSTER_DIR="/img/moviePosters/";
 	private Map<Integer, Movie> movies = new HashMap<>();
 	
 	@Autowired
@@ -55,7 +61,25 @@ public class MovieFileDAO implements MovieDAO {
 	}
 	@Override
 	public void addMovie(Movie movie) {
+		
 		movies.put(movie.getId(), movie);
+	}
+	
+	public void downloadMovieImage(Movie movie) throws IOException, MalformedURLException {
+		IMDBParser parser = new IMDBParser();
+		String movieUrl = parser.googleMovieUrl(movie.getName());
+		URL movieImageUrl = new URL(parser.getImageLocation(movieUrl));
+		File destination = new File(POSTER_DIR+nameToFileName(movie.getName()));
+;		FileUtils.copyURLToFile(movieImageUrl, destination, 10000, 15000);
+	}
+	
+	public String nameToFileName(String movieName) {
+		StringBuilder fileName = new StringBuilder();
+		String[] splitName = movieName.split(" ");
+		for (String word : splitName) {
+			fileName.append(word);
+		}
+		return fileName.toString()+".jpg";
 	}
 	
 	@Override
