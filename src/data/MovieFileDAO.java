@@ -24,7 +24,10 @@ import org.springframework.web.context.WebApplicationContext;
 public class MovieFileDAO implements MovieDAO {
 	private static final String FILE_NAME="/WEB-INF/movies.csv";
 	private static final String POSTER_DIR="/img/moviePosters/";
+	private static final String DEFAULT_IMG="unknown.png";
+	private static final String FULL_POSTER_PATH="/Users/jodev/SD/Java/workspace/Movies/WebContent/img/moviePosters/";
 	private Map<Integer, Movie> movies = new HashMap<>();
+	private IMDBParser parser;
 	
 	@Autowired
 	private WebApplicationContext wac;
@@ -47,7 +50,7 @@ public class MovieFileDAO implements MovieDAO {
 				String mpaaRating = tokens[1];
 				Boolean watched = Boolean.parseBoolean(tokens[2]);
 				int userRating = Integer.parseInt(tokens[3]);
-				List<String> genre = new ArrayList<>(Arrays.asList(tokens[4].split(",")));
+				ArrayList<String> genre = new GenreList<>(Arrays.asList(tokens[4].split(",")));
 				String description = tokens[5];
 				String image = tokens[6];
 				String userNotes = tokens[7];
@@ -61,21 +64,43 @@ public class MovieFileDAO implements MovieDAO {
 	}
 	@Override
 	public void addMovie(Movie movie) {
+		parser = new IMDBParser(movie.getName());
+		if (parser.getImageLocation().equals(DEFAULT_IMG)) {
+			movie.setImage(DEFAULT_IMG);
+		} else {
+			String fileName = downloadMovieImage(parser.getImageLocation(), movie.getName());
+			movie.setImage(fileName);
+		}
+		movie.setDescription(parser.getParsedDescription());
+		movie.setGenre(parser.getParsedGenre());
+		movie.setMpaaRating(parser.getParsedRating());
 		
+//			movie.setImage(nameToFileName(movie.getName()));
+
 		movies.put(movie.getId(), movie);
 	}
 	
-	public void downloadMovieImage(Movie movie) throws IOException, MalformedURLException {
-		IMDBParser parser = new IMDBParser();
-		String movieUrl = parser.googleMovieUrl(movie.getName());
-		URL movieImageUrl = new URL(parser.getImageLocation(movieUrl));
-		File destination = new File(POSTER_DIR+nameToFileName(movie.getName()));
-;		FileUtils.copyURLToFile(movieImageUrl, destination, 10000, 15000);
+	// try to do the download, if exceptions occur returns the default image, 
+	// else returns the new file name
+	public String downloadMovieImage(String movieLocation, String name) {
+		String outFile = DEFAULT_IMG;
+		try {
+			URL url = new URL(movieLocation);
+			String fileName = nameToFileName(name);
+			File destination = new File(FULL_POSTER_PATH+fileName);
+			FileUtils.copyURLToFile(url, destination, 10000, 15000);
+			outFile = fileName;
+		} catch (MalformedURLException mfe) {
+			mfe.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		return outFile;
 	}
 	
 	public String nameToFileName(String movieName) {
 		StringBuilder fileName = new StringBuilder();
-		String[] splitName = movieName.split(" ");
+		String[] splitName = movieName.toLowerCase().split(" ");
 		for (String word : splitName) {
 			fileName.append(word);
 		}

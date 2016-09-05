@@ -103,7 +103,7 @@ public class MoviesController {
 	
 	@RequestMapping("submitEdit.do")
 	public ModelAndView submitEdit(@RequestParam("attribute") String attribute,
-			@RequestParam("newValue") String newValue,
+			@RequestParam(value="newValue", required=false) String newValue,
 			@ModelAttribute("movieId") Integer id) {
 		
 		ModelAndView mv = new ModelAndView("index.jsp");

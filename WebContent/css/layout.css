@@ -295,6 +295,25 @@ td, th {
     padding-top:10px;
 }
 
+
+#watchedButtonSelected {
+    background-color: rgb(51, 51, 51);
+    height:100%;
+    padding:2px 5px 2px 5px;
+    border-radius: 3px;
+    width: 65px;
+}
+#watchedButtonSelected:hover {
+    background-color: black;
+}
+#watchedButtonSelected a {
+        display: block;
+        color: white;
+}
+#watchedButtonSelected a:hover {
+    text-decoration: none;
+}
+
 /*
 Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
@@ -408,5 +427,13 @@ only screen and (max-width: 760px),
     #movieName {
         font-size:1.4em;
     }
+
+    #watchedButtonSelected {
+        width: 60px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 5px;
+    }
+
 
 }

@@ -8,6 +8,15 @@
       <h2 class="h2">${selectedMovie.name}</h2>
       <p>${selectedMovie.mpaaRating} | ${selectedMovie.genre}</p>
       <p>Description: ${selectedMovie.description}</p>
+      <div id="watchedButtonSelected">
+          <a class="clickable" href="submitEdit.do?attribute=watched&id=${selectedMovie.id}">
+              Watched
+                  <span class="checked" ><input type="checkbox" name="watched" value="${selectedMovie.watched}" disabled
+                      <c:if test="${selectedMovie.watched}">checked</c:if>>
+                  </span>
+
+          </a>
+      </div>
 
       <p>Your Rating: ${selectedMovie.userRating}
           <a href="submitEdit.do?attribute=userRating&newValue=1">1 </a>

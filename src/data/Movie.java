@@ -13,6 +13,7 @@ public class Movie {
 	private String image;
 	private boolean watched;
 	public static int numCreated;
+	private static final String POSTER_DIR = "img/moviePosters/";
 	
 	public Movie() {
 		this.id = ++numCreated;
@@ -103,7 +104,7 @@ public class Movie {
 	}
 
 	public void setImage(String image) {
-		this.image = "img/moviePosters/" + image;
+		this.image = POSTER_DIR + image;
 	}
 
 	@Override
