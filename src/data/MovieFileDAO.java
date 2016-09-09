@@ -25,7 +25,7 @@ public class MovieFileDAO implements MovieDAO {
 	private static final String FILE_NAME="/WEB-INF/movies.csv";
 	private static final String POSTER_DIR="/img/moviePosters/";
 	private static final String DEFAULT_IMG="unknown.png";
-	private static final String FULL_POSTER_PATH="/Users/jodev/SD/Java/workspace/Movies/WebContent/img/moviePosters/";
+	private static final String FULL_POSTER_PATH="/var/lib/tomcat8/webapps/Movies/img/moviePosters/";
 	private Map<Integer, Movie> movies = new HashMap<>();
 	private IMDBParser parser;
 	
