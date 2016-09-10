@@ -10,5 +10,5 @@
 
 	<context:component-scan base-package="controllers"/>
 
-	<bean id="dao" class="data.MovieFileDAO"/> 
+	<bean id="dao" class="data.MovieDbDAO"/> 
 </beans>
