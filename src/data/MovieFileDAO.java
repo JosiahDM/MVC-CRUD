@@ -138,6 +138,6 @@ public class MovieFileDAO implements MovieDAO {
 	}
 	@Override
 	public void updateMovie(Movie movie) {
-		// only relevent to the DB version
+		// only relevant to the DB version
 	}
 }

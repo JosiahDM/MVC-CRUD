@@ -24,7 +24,7 @@ public class MovieDbDAO implements MovieDAO {
 	private static final String pass = "root";
 	private static final String DEFAULT_IMG="unknown.png";
 //	private static final String FULL_POSTER_PATH="/var/lib/tomcat8/webapps/Movies/img/moviePosters/";
-	private static final String FULL_POSTER_PATH="/Users/jodev/SD/Java/workspace/Movies/WebContent/";
+	private static final String FULL_POSTER_PATH="/Users/jodev/SD/Java/workspace/Movies/WebContent/img/moviePosters/";
 	private IMDBParser parser;
 	
 	public MovieDbDAO() {
@@ -41,12 +41,13 @@ public class MovieDbDAO implements MovieDAO {
 			    + "FROM user_data ud   RIGHT JOIN movie ON  ud.movie_id = movie.id "
 			                        + "RIGHT JOIN movie_genre mg ON mg.movie_id = movie.id "
 			                        + "RIGHT JOIN genre g ON g.id = mg.genre_id "
-			    + "WHERE movie.id = ? ";
+			    + "WHERE movie.id = ? AND user_id = ?";
 		Movie movie = null; 
 		try (Connection conn = DriverManager.getConnection(URL, user, pass);
 					 PreparedStatement stmt = conn.prepareStatement(sqltxt);)
 		{
 			stmt.setInt(1, id);
+			stmt.setInt(2, 1); // TODO real userid
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				GenreList<String> genre = new GenreList<>();
@@ -65,57 +66,121 @@ public class MovieDbDAO implements MovieDAO {
 		return movie;
 	}
 
-	// TODO maybe have a check here if the movie is already in database, don't add.
+	// Adds a movie to the database if it isn't already in. 
+	// If movie is in database, will check if user already has it as well.
+	// If user doesn't have it, insert the movie id into user_data so the user has it.
+	// no new movie entries created unless it is an entirely new movie to the DB.
 	@Override
 	public void addMovie(Movie movie) {
-		runParse(movie);
-		String insertMovie = "INSERT INTO movie (name, mpaa_rating, description, image) "
-						   + "VALUES (?, ?, ?, ?)";
+		setUnique(movie);
+		String movies = "SELECT name, id, year FROM movie";
+		String userMovies = "SELECT m.name, m.id, m.year "
+				      + "FROM movie m JOIN user_data ud ON ud.movie_id = m.id "
+				      + "WHERE user_id = ?;";
+		String insertMovie = "INSERT INTO movie (name, mpaa_rating, description, image, year) "
+						   + "VALUES (?, ?, ?, ?, ?)";
 		String insertGenres = "INSERT INTO movie_genre (movie_id, genre_id) "
 							+ "VALUES (?, ?)";
 		String insertUserData = "INSERT INTO user_data (movie_id, rating, user_id, notes, watched) "
 							  + "VALUES (?, ?, ?, ?, ?)";
 		try (Connection conn = DriverManager.getConnection(URL, user, pass);
+				PreparedStatement userList = conn.prepareStatement(userMovies);
+				PreparedStatement list = conn.prepareStatement(movies);
 				PreparedStatement stmtM = conn.prepareStatement(insertMovie, Statement.RETURN_GENERATED_KEYS);
 				PreparedStatement stmtG = conn.prepareStatement(insertGenres);
 				PreparedStatement stmtU = conn.prepareStatement(insertUserData);)
-		{
+		{	
+			userList.setInt(1, 1); // real userid will go here
+			ResultSet rs = userList.executeQuery();
+			// Add movie data only if movie isn't already in database
+			boolean inDb = movieInDb(movie,list);
 			conn.setAutoCommit(false);
-			stmtM.setString(1, movie.getName());
-			stmtM.setString(2, movie.getMpaaRating());
-			stmtM.setString(3, movie.getDescription());
-			stmtM.setString(4, movie.getRawImage());
-			int mov = stmtM.executeUpdate();
-			ResultSet keys = stmtM.getGeneratedKeys();
-			if (keys.next()) {
-				movie.setId(keys.getInt(1));
+			if (!inDb) {
+				fullParse(movie);
+				movieDataInsert(movie, stmtM);
+				genreInsert(movie, stmtG);
+				inDb = true;
 			}
-			int genreUpdate = 0;
-			GenreList<String> genres = (GenreList<String>) movie.getGenre();
-			for (int i = 0; i < genres.size(); i++) {
-				stmtG.setInt(1, movie.getId());
-				stmtG.setInt(2, genres.getGenreId(i));
-				genreUpdate = stmtG.executeUpdate();
+			if (inDb && !userHasMovie(movie, rs)) {
+				userDataInsert(movie, stmtU);
 			}
-			stmtU.setInt(1, movie.getId());
-			stmtU.setInt(2, movie.getUserRating());
-// TODO actual userid would go in next line
-			stmtU.setInt(3, 1); 
-			stmtU.setString(4, movie.getUserNotes());
-			stmtU.setBoolean(5, movie.getWatched());
-			int ud = stmtU.executeUpdate();
-			conn.commit();
+				conn.commit();
+				
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 		}
 	}
 	
-	private void runParse(Movie movie) {
+	private void setUnique(Movie movie) {
 		parser = new IMDBParser(movie.getName());
+		movie.setName(parser.getMovieName());
+		movie.setYear(parser.getParsedYear());
+	}
+	// Movie name and date combination should be unique
+	private boolean movieInDb(Movie movie, PreparedStatement stmt) throws SQLException {
+		ResultSet rs = stmt.executeQuery();
+		while ( rs.next() ) { 
+			if (movie.getName().equals(rs.getString(1)) && movie.getYear().equals(rs.getString(3))) {
+				movie.setId(rs.getInt(2));
+				return true;
+			}
+		}
+		return false;
+	}
+	// Check if user already has this movie
+	private boolean userHasMovie(Movie movie, ResultSet rs) throws SQLException {
+		rs.beforeFirst();
+		while (rs.next()) {
+			if (movie.getId() == rs.getInt(2)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void movieDataInsert(Movie movie, PreparedStatement stmt) throws SQLException {
+		stmt.setString(1, movie.getName());
+		stmt.setString(2, movie.getMpaaRating());
+		stmt.setString(3, movie.getDescription());
+		stmt.setString(4, movie.getRawImage());
+		stmt.setString(5, movie.getYear());
+		stmt.executeUpdate();
+		ResultSet keys = stmt.getGeneratedKeys();
+		if (keys.next()) {
+			movie.setId(keys.getInt(1));
+		}
+	}
+	private void genreInsert(Movie movie, PreparedStatement stmt) throws SQLException {
+		GenreList<String> genres = (GenreList<String>) movie.getGenre();
+		for (int i = 0; i < genres.size(); i++) {
+			stmt.setInt(1, movie.getId());
+			stmt.setInt(2, genres.getGenreId(i));
+			stmt.executeUpdate();
+		}
+	}
+	private void userDataInsert(Movie movie, PreparedStatement stmt) throws SQLException {
+		stmt.setInt(1, movie.getId());
+		stmt.setInt(2, movie.getUserRating());
+//TODO actual userid would go in next line
+		stmt.setInt(3, 1); 
+		stmt.setString(4, movie.getUserNotes());
+		stmt.setBoolean(5, movie.getWatched());
+		stmt.executeUpdate();
+	}
+	
+	
+	private void fullParse(Movie movie) {
+		// If parser doesn't currently have the movie data for some reason, run a new fetch/parse
+		if (!parser.getMovieName().equals(movie.getName())) {
+			parser = new IMDBParser(movie.getName());
+			parser.parseAll();
+		} else {
+			parser.parseAll();
+		}
 		if (parser.getImageLocation().equals(DEFAULT_IMG)) {
 			movie.setImage(DEFAULT_IMG);
 		} else {
-			String fileName = downloadMovieImage(parser.getImageLocation(), movie.getName());
+			String fileName = downloadMovieImage(parser.getImageLocation(), movie.getName()+movie.getYear());
 			movie.setImage(fileName);
 		}
 		movie.setDescription(parser.getParsedDescription());

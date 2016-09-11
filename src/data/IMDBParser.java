@@ -1,8 +1,9 @@
 package data;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,6 +12,7 @@ import org.jsoup.select.Elements;
 
 public class IMDBParser {
 	private String movieName;
+	private String parsedYear;
 	private Document doc;
 	private String imdbUrl;
 	private String imageLocation;
@@ -34,7 +36,8 @@ public class IMDBParser {
 		this.movieName = movieName;
 		googleMovieUrl();
 		fetchDoc();
-		parseAll();
+		parseFullName();
+		parseYear();
 	}
 	
 	public void parseAll() {
@@ -89,6 +92,33 @@ public class IMDBParser {
 		}
 		imageLocation = loc;
 		return loc;
+	}
+	public String parseFullName() {
+		Pattern p = Pattern.compile("(.*)\\W\\d{4}\\W");
+		if (!hasDoc) {
+			return this.movieName;
+		}
+		String name = doc.select(".title_wrapper")
+						.select("[itemprop=name]").text();
+		Matcher m = p.matcher(name);
+		m.find();
+		name = name.substring(m.start(1), m.end(1)-1);
+		this.movieName = name;
+		return name;
+	}
+	
+	public String parseYear() {
+		Pattern p = Pattern.compile("(\\W(\\d{4})\\W$)");
+		if(!hasDoc) {
+			return "";
+		}
+		String year = doc.select(".title_wrapper")
+				.select("[itemprop=name]").text();
+		Matcher m = p.matcher(year);
+		m.find();
+		year = year.substring(m.start(2), m.end(2));
+		this.parsedYear = year;
+		return year;
 	}
 	
 	public String parseDescription() {
@@ -160,13 +190,15 @@ public class IMDBParser {
 	public String getParsedRating() {
 		return parsedRating;
 	}
-
+	public String getParsedYear() {
+		return parsedYear;
+	}
 	public void setMovieName(String movieName) {
 		this.movieName = movieName;
 	}
 	
 //	public static void main(String[] args) {
-//		IMDBParser parser = new IMDBParser("asdfafwrt3twer");
-//		System.out.println(parser.parseImageLocation());
+//		IMDBParser parser = new IMDBParser("Willy wonka and the chocolate factory");
+//		System.out.println("***"+parser.parseFullName()+"***");
 //	}
 }

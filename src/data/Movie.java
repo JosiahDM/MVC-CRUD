@@ -14,6 +14,7 @@ public class Movie {
 	private boolean watched;
 	private String rawImage;
 	public static int numCreated;
+	private String year;
 	private static final String POSTER_DIR = "img/moviePosters/";
 	
 	public Movie() {
@@ -83,6 +84,14 @@ public class Movie {
 	}
 	
 	
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
 	// Setters
 	public void setId(int id) {
 		this.id = id;
