@@ -26,13 +26,6 @@ public class MoviesController {
 		return 1;
 	}
 	
-	@RequestMapping("results.do")
-	public ModelAndView show(@RequestParam("userInput") String in) {
-		ModelAndView mv = new ModelAndView("index.jsp");
-		mv.addObject("output", in);
-		return mv;
-	}
-	
 	@RequestMapping("listMovies.do")
 	public ModelAndView list() {
 		ModelAndView mv = new ModelAndView("index.jsp");
@@ -65,8 +58,7 @@ public class MoviesController {
 	@RequestMapping("deleteMovie.do")
 	public ModelAndView deleteMovie(@RequestParam("id") Integer id) {
 		ModelAndView mv = new ModelAndView("index.jsp");
-		Movie movie = movieDao.deleteMovie(id);
-//		String result = ( movie != null) ? "Successfully Deleted " + movie.getName() : "Movie not found...nothing deleted."; 
+		movieDao.deleteMovie(id);
 		mv.addObject("movies", movieDao.getAllValues());
 		return mv;
 	}
@@ -76,8 +68,7 @@ public class MoviesController {
 			@ModelAttribute("movieId") Integer movieId) {
 		ModelAndView mv = new ModelAndView("index.jsp");
 		mv.addObject("movieId", id);
-		mv.addObject("selectedMovie", movieDao.getOne(id));
-		
+		mv.addObject("selectedMovie", movieDao.getMovieById(id));
 		return mv;
 	}
 	
@@ -90,13 +81,14 @@ public class MoviesController {
 		ModelAndView mv = new ModelAndView("index.jsp");
 		Movie movie = null;
 		if(listedMovie == null) {
-			movie = movieDao.getOne(id);
+			movie = movieDao.getMovieById(id);
 			mv.addObject("selectedMovie", movie);
 		} else {
-			movie = movieDao.getOne(listedMovie);
+			movie = movieDao.getMovieById(listedMovie);
 			mv.addObject("movieId", listedMovie);
 			mv.addObject("movies", movieDao.getAllValues());
 		}
+		movieDao.updateMovie(movie);
 		mv.addObject("edit", selectAttribute(attribute, mv, movie));
 		return mv;
 	}
@@ -107,8 +99,9 @@ public class MoviesController {
 			@ModelAttribute("movieId") Integer id) {
 		
 		ModelAndView mv = new ModelAndView("index.jsp");
-		Movie movie = movieDao.getOne(id);
+		Movie movie = movieDao.getMovieById(id);
 		sendResponse(attribute, newValue, mv, movie);
+		movieDao.updateMovie(movie);
 		mv.addObject("selectedMovie", movie);
 		return mv;
 	}
@@ -117,10 +110,11 @@ public class MoviesController {
 	public ModelAndView submitEditInList(@RequestParam("attribute") String attribute,
 			@RequestParam(value="newValue", required=false) String newValue,
 			@RequestParam("id") Integer id) {
-		Movie movie = movieDao.getOne(id);
+		Movie movie = movieDao.getMovieById(id);
 		ModelAndView mv = new ModelAndView("index.jsp");
 		mv.addObject("movieId", id);
 		sendResponse(attribute, newValue, mv, movie);
+		movieDao.updateMovie(movie);
 		mv.addObject("movies", movieDao.getAllValues());
 		return mv;
 	}

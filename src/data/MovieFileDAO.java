@@ -113,7 +113,7 @@ public class MovieFileDAO implements MovieDAO {
 	}
 	
 	@Override
-	public Movie getOne(int id) {
+	public Movie getMovieById(int id) {
 		return movies.get(id);
 	}
 	
@@ -135,5 +135,9 @@ public class MovieFileDAO implements MovieDAO {
 	@Override
 	public Movie deleteMovie(int id) {
 		return movies.remove(id);
+	}
+	@Override
+	public void updateMovie(Movie movie) {
+		// only relevent to the DB version
 	}
 }

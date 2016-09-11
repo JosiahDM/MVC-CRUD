@@ -12,15 +12,15 @@ public class Movie {
 	private String description;
 	private String image;
 	private boolean watched;
+	private String rawImage;
 	public static int numCreated;
 	private static final String POSTER_DIR = "img/moviePosters/";
 	
 	public Movie() {
-		this.id = ++numCreated;
+		
 	}
 	
 	public Movie(String name, String mpaaRating, boolean watched, int userRating, List<String> genre, String description, String image, String userNotes) {
-		this.id = ++numCreated;
 		this.name = name;
 		this.mpaaRating = mpaaRating;
 		this.watched = watched;
@@ -31,6 +31,15 @@ public class Movie {
 		this.userNotes = userNotes;
 	}
 	
+	public Movie(String name, String mpaaRating, boolean watched, int userRating, String description, String image, String userNotes) {
+		this.name = name;
+		this.mpaaRating = mpaaRating;
+		this.watched = watched;
+		this.userRating = userRating;
+		this.description = description;
+		setImage(image);
+		this.userNotes = userNotes;
+	}
 	
 	// Getters
 	public int getId() {
@@ -69,6 +78,10 @@ public class Movie {
 		return image;
 	}
 	
+	public String getRawImage() {
+		return rawImage;
+	}
+	
 	
 	// Setters
 	public void setId(int id) {
@@ -104,6 +117,7 @@ public class Movie {
 	}
 
 	public void setImage(String image) {
+		this.rawImage = image;
 		this.image = POSTER_DIR + image;
 	}
 
