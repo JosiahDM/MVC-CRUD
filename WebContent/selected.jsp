@@ -7,7 +7,14 @@
   <div class="sm-col sm-col-6" id="details">
       <h2 class="h2">${selectedMovie.name}</h2>
       <p>${selectedMovie.mpaaRating} | ${selectedMovie.genre}</p>
-      <p>Description: ${selectedMovie.description}</p>
+      <p>Description: ${selectedMovie.description}
+      	<c:if test="${ selectedMovie.image == 'img/moviePosters/unknown.png' ||
+      				   selectedMovie.description == 'Movie not found' ||
+      				   selectedMovie.genre == '' ||
+      				   selectedMovie.year == ''     }">
+      		<a href="repopulate.do?id=${selectedMovie.id}">Re-Attempt auto-populate of missing fields.</a>
+      	</c:if>
+      </p>
       <div id="watchedButtonSelected">
           <a class="clickable" href="submitEdit.do?attribute=watched&id=${selectedMovie.id}">
               Watched
@@ -18,13 +25,9 @@
           </a>
       </div>
 
-      <p>Your Rating: ${selectedMovie.userRating}
-          <a href="submitEdit.do?attribute=userRating&newValue=1">1 </a>
-          <a href="submitEdit.do?attribute=userRating&newValue=2">2 </a>
-          <a href="submitEdit.do?attribute=userRating&newValue=3">3 </a>
-          <a href="submitEdit.do?attribute=userRating&newValue=4">4 </a>
-          <a href="submitEdit.do?attribute=userRating&newValue=5">5 </a>
-      </p>
+      <div class="starWrapper"> <%@ include file="stars.jsp" %>
+        <span id="ratingSpan">${selectedMovie.userRating}/5</span>
+      </div>
 
       <c:choose>
           <c:when test="${(edit == true) and (item == 'userNotes')}">

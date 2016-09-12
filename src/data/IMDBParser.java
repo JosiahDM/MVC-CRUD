@@ -40,6 +40,12 @@ public class IMDBParser {
 		parseYear();
 	}
 	
+	public IMDBParser(String movieName, Movie movie) {
+		this(movieName);
+		movie.setName(this.getMovieName());
+		movie.setYear(this.getParsedYear());
+	}
+	
 	public void parseAll() {
 		parseImageLocation();
 		parseGenre();
@@ -110,6 +116,7 @@ public class IMDBParser {
 	public String parseYear() {
 		Pattern p = Pattern.compile("(\\W(\\d{4})\\W$)");
 		if(!hasDoc) {
+			this.parsedYear = "";
 			return "";
 		}
 		String year = doc.select(".title_wrapper")
@@ -123,7 +130,8 @@ public class IMDBParser {
 	
 	public String parseDescription() {
 		if (!hasDoc) {
-			return "Not found.";
+			this.parsedDescription = "Movie not found";
+			return "Movie not found.";
 		}
 		String description = "";
 		Elements media = doc.select(".summary_text");
@@ -134,6 +142,7 @@ public class IMDBParser {
 	
 	public String parseRating() {
 		if (!hasDoc) {
+			this.parsedRating = "";
 			return "";
 		}
 		String rating = "";
@@ -155,6 +164,8 @@ public class IMDBParser {
 	public List<String> parseGenre() {
 		GenreList<String> genre = new GenreList<>();
 		if (!hasDoc) {
+			genre.add("");
+			this.parsedGenre = genre;
 			return genre;
 		}
 		String hit = doc.select(".subtext").select(".itemprop").html();

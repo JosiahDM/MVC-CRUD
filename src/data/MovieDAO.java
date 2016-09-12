@@ -13,5 +13,6 @@ public interface MovieDAO {
 	public Collection<Movie> getAllValues();
 	public Movie deleteMovie(int id);
 	public void updateMovie(Movie movie);
+	public void retryParse(Movie movie);
 	
 }

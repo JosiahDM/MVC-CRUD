@@ -140,4 +140,9 @@ public class MovieFileDAO implements MovieDAO {
 	public void updateMovie(Movie movie) {
 		// only relevant to the DB version
 	}
+	@Override
+	public void retryParse(Movie movie) {
+		// TODO Auto-generated method stub
+		
+	}
 }

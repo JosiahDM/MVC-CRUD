@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="css/basscss.min.css">
     <link rel="stylesheet" href="css/layout.css" >
 </head>
-<body>
+	<body>
 
-<div id="container">
+	<div id="container">
     <div id="navbar">
         <ul>
             <li><a href="listMovies.do">List All Movies</a></li>

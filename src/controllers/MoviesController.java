@@ -109,7 +109,7 @@ public class MoviesController {
 	@RequestMapping("submitEditInList.do")
 	public ModelAndView submitEditInList(@RequestParam("attribute") String attribute,
 			@RequestParam(value="newValue", required=false) String newValue,
-			@RequestParam("id") Integer id) {
+			@RequestParam("id") Integer id)  {
 		Movie movie = movieDao.getMovieById(id);
 		ModelAndView mv = new ModelAndView("index.jsp");
 		mv.addObject("movieId", id);
@@ -118,6 +118,15 @@ public class MoviesController {
 		mv.addObject("movies", movieDao.getAllValues());
 		return mv;
 	}
+	
+	@RequestMapping("repopulate.do")
+		public ModelAndView repopulate(@RequestParam("id") Integer id) {
+			ModelAndView mv = new ModelAndView("index.jsp");
+			Movie movie = movieDao.getMovieById(id);
+			movieDao.retryParse(movie);
+			mv.addObject("selectedMovie", movie);
+			return mv;
+		}
 	
 	// Boolean value listView is true if on the main "List All" page and wants to edit
 	// False if in "Selected" view.

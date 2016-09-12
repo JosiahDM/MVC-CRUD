@@ -28,7 +28,6 @@
                     <a href="submitEditInList.do?attribute=userRating&newValue=3&id=${movie.id}#${movie.id}">3 </a>
                     <a href="submitEditInList.do?attribute=userRating&newValue=4&id=${movie.id}#${movie.id}">4 </a>
                     <a href="submitEditInList.do?attribute=userRating&newValue=5&id=${movie.id}#${movie.id}">5 </a>
-
                 </td>
                 <td id="bottom-td">
                     Description: ${movie.description}
