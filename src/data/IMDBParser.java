@@ -26,7 +26,7 @@ public class IMDBParser {
 												"fantasy, film-noir, game-show, history, horror, " +
 												"music, musical, mystery, news, reality-tv," +
 												"romance, sci-fi, sport, talk-show, thriller," +
-												"war, western";
+												"war, western, not rated";
 	
 	public IMDBParser() {
 		
@@ -151,13 +151,13 @@ public class IMDBParser {
 				.attr("content");
 		switch (rating.toUpperCase()) {
 		case "G": case "PG": case "PG-13":
-		case "R": case "NC-17": case "X":
+		case "R": case "NC-17": case "X": case "NOT RATED":
 			break;
 		default:
 			rating = "";
 			break;
 		}
-		parsedRating = rating;
+		this.parsedRating = rating;
 		return rating;
 	}
 	
@@ -209,7 +209,7 @@ public class IMDBParser {
 	}
 	
 //	public static void main(String[] args) {
-//		IMDBParser parser = new IMDBParser("Willy wonka and the chocolate factory");
-//		System.out.println("***"+parser.parseFullName()+"***");
+//		IMDBParser parser = new IMDBParser("the babadook");
+//		System.out.println("***"+parser.parseRating()+"***");
 //	}
 }

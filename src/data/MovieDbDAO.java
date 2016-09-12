@@ -189,9 +189,11 @@ public class MovieDbDAO implements MovieDAO {
 		                 + "WHERE id = ?";
 		String updateGenre = "INSERT INTO movie_genre (movie_id, genre_id) "
 						   + "VALUES (?, ?);";
+		String deleteEmptyGenre = "DELETE from movie_genre WHERE movie_id = ? and genre_id = 27";
 		try (Connection conn = DriverManager.getConnection(URL, user, pass);
 				PreparedStatement update = conn.prepareStatement(updateSql);
-				PreparedStatement genres = conn.prepareStatement(updateGenre);) 
+				PreparedStatement genres = conn.prepareStatement(updateGenre);
+				PreparedStatement delete = conn.prepareStatement(deleteEmptyGenre)) 
 		{
 			conn.setAutoCommit(false);
 			update.setString(1, movie.getName());
@@ -201,7 +203,10 @@ public class MovieDbDAO implements MovieDAO {
 			update.setString(5, movie.getYear());
 			update.setInt(6, movie.getId());
 			update.executeUpdate();
+			conn.commit();
 			genreInsert(movie, genres);
+			delete.setInt(1, movie.getId());
+			delete.executeUpdate();
 			conn.commit();
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();

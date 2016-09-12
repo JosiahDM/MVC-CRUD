@@ -11,7 +11,8 @@
       	<c:if test="${ selectedMovie.image == 'img/moviePosters/unknown.png' ||
       				   selectedMovie.description == 'Movie not found' ||
       				   selectedMovie.genre == '' ||
-      				   selectedMovie.year == ''     }">
+      				   selectedMovie.year == ''  ||
+                       empty selectedMovie.mpaaRating   }">
       		<a href="repopulate.do?id=${selectedMovie.id}">Re-Attempt auto-populate of missing fields.</a>
       	</c:if>
       </p>

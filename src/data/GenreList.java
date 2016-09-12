@@ -41,7 +41,7 @@ public class GenreList<E> extends ArrayList<E> {
 			case "musical": return 16; case "mystery": return 17; case "news": return 18;
 			case "reality-tv": return 19; case "romance": return 20; case "sci-fi": return 21;
 			case "sport": return 22; case "talk-show": return 23; case "thriller": return 24;
-			case "war": return 25; case "western": return 26;
+			case "war": return 25; case "western": return 26; case "not rated": return 28;
 			default: return 27;
 		}
 	}
