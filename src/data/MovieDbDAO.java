@@ -20,11 +20,10 @@ import org.apache.commons.io.FileUtils;
 
 public class MovieDbDAO implements MovieDAO {
 	private static final String URL = "jdbc:mysql://localhost:3306/moviesdb";
-	private static final String user = "root";
-	private static final String pass = "root";
+	private static final String user = "application";
+	private static final String pass = "application";
 	private static final String DEFAULT_IMG = "unknown.png";
-	// private static final String
-	// FULL_POSTER_PATH="/var/lib/tomcat8/webapps/Movies/img/moviePosters/";
+//	 private static final String FULL_POSTER_PATH="/var/lib/tomcat8/webapps/Movies/img/moviePosters/";
 	private static final String FULL_POSTER_PATH = "/Users/jodev/SD/Java/workspace/Movies/WebContent/img/moviePosters/";
 	private IMDBParser parser;
 
@@ -196,14 +195,19 @@ public class MovieDbDAO implements MovieDAO {
 				PreparedStatement delete = conn.prepareStatement(deleteEmptyGenre)) 
 		{
 			conn.setAutoCommit(false);
-			update.setString(1, movie.getName());
-			update.setString(2, movie.getMpaaRating());
-			update.setString(3, movie.getDescription());
-			update.setString(4, movie.getRawImage());
-			update.setString(5, movie.getYear());
-			update.setInt(6, movie.getId());
-			update.executeUpdate();
-			conn.commit();
+			try { // needed a separate try/catch here to ensure if this part is successful, it gets committed
+				update.setString(1, movie.getName());
+				update.setString(2, movie.getMpaaRating());
+				update.setString(3, movie.getDescription());
+				update.setString(4, movie.getRawImage());
+				update.setString(5, movie.getYear());
+				update.setInt(6, movie.getId());
+				update.executeUpdate();
+				conn.commit();
+			} catch (SQLException e) {
+				System.err.println("Movie update 1");
+				e.printStackTrace();
+			}
 			genreInsert(movie, genres);
 			delete.setInt(1, movie.getId());
 			delete.executeUpdate();

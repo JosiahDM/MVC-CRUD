@@ -85,7 +85,6 @@ public class IMDBParser {
 			this.imageLocation = loc;
 			return loc;
 		}
-
 		Elements media = doc.select(".poster");
 		for (Element element : media) {
 			loc = element.children().select("img").attr("src");
@@ -93,7 +92,7 @@ public class IMDBParser {
 		loc = loc.split("._V1_")[0] + "._V1_.jpg";
 
 		// could use a bit more hardy validation here
-		if(loc.length() < 50 || !loc.contains("ia.media-imdb.com/images")) {
+		if(loc.length() < 50 || !loc.contains("images-na.ssl-images-amazon.com")) {
 			loc=DEFAULT_LOC;
 		}
 		imageLocation = loc;
@@ -208,8 +207,9 @@ public class IMDBParser {
 		this.movieName = movieName;
 	}
 	
-//	public static void main(String[] args) {
-//		IMDBParser parser = new IMDBParser("the babadook");
-//		System.out.println("***"+parser.parseRating()+"***");
-//	}
+	public static void main(String[] args) {
+		IMDBParser parser = new IMDBParser("Willy Wonka and the chocolate factory");
+		System.out.println("***"+parser.parseRating()+"***");
+		System.out.println("img: "+ parser.getImageLocation());
+	}
 }
